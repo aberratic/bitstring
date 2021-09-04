@@ -1,0 +1,23 @@
+{
+  "name": "Bitstring",
+  "version": "0.1.0",
+  "description": "A library to handle bitstrings with arbitrary size",
+  "keywords": "datastructure, bit, bits, bitstring",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aberratic/bitstring.git"
+  },
+  "authors": [
+    {
+      "name": "Stefan Luecke",
+      "email": "git@aberrational.org",
+      "url": "https://aberrational.org"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/aberratic/bitstring/",
+  "frameworks": "espidf",
+  "platforms": "*",
+  "includeDir": "include",
+  "srcDir": "src"
+}
