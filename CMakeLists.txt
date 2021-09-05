@@ -24,5 +24,9 @@ SOFTWARE.
 
 cmake_minimum_required(VERSION 3.10)
 
-idf_component_register(SRCS "test/*.c"
+if (NOT DEFINED PROJECT_NAME)
+    include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+    project(bitstring)
+endif (NOT DEFINED PROJECT_NAME)
+idf_component_register(SRCS "src/bitstring.c"
                 INCLUDE_DIRS "include")

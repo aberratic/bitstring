@@ -192,7 +192,7 @@ bool bstr_get(const bstr_bitstr_t *const bstr, unsigned int bit) {
   }
 }
 
-int bstr_ffs(const bstr_bitstr_t *const bstr) { // ffs();
+int bstr_ffs(const bstr_bitstr_t *const bstr) {
 #ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
   assert(bstr != NULL);
 #endif
