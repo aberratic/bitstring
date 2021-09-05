@@ -1,6 +1,6 @@
 {
   "name": "Bitstring",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A library to handle bitstrings with arbitrary size",
   "keywords": "datastructure, bit, bits, bitstring",
   "repository": {
@@ -16,8 +16,18 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/aberratic/bitstring/",
-  "frameworks": "espidf",
+  "frameworks": "*",
   "platforms": "*",
   "includeDir": "include",
-  "srcDir": "src"
+  "srcDir": "src",
+  "export": {
+    "exclude": [
+      ".pio",
+      "build",
+      "doc",
+      "test",
+      "sdkconfig",
+      ".github"
+    ]
+  }
 }
