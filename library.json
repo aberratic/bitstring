@@ -27,7 +27,9 @@
       "doc",
       "test",
       "sdkconfig",
-      ".github"
+      "sdkconfig.esp32dev",
+      ".github",
+      ".gitignore"
     ]
   }
 }
