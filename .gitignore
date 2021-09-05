@@ -22,7 +22,7 @@
 # 
 
 build
-sdkconfig
+sdkconfig*
 doc
 .pio
 .vscode
