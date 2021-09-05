@@ -217,6 +217,14 @@ bool bstr_get(const bstr_bitstr_t *const bstr, unsigned int bit);
 int bstr_ffs(const bstr_bitstr_t *const bstr);
 
 /**
+ * @brief Find the first unset bit.
+ *
+ * @param bstr Pointer to bitstring object.
+ * @return int Index of the first unset bit or -1 when there was none.
+ */
+int bstr_ffus(const bstr_bitstr_t *const bstr);
+
+/**
  * @brief Count trailing zeros.
  *
  * @param bstr Pointer to bitstring object.

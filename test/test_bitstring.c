@@ -232,7 +232,21 @@ void test_bstr_popcnt(void) {
   }
 }
 
-void main(void) {
+void test_bstr_ffus(void) {
+  for (unsigned int i = 1; i < TEST_BSTR_MAX_TEST_CAPACITY; i++) {
+    bstr_bitstr_t *test = bstr_create_bitstr(i);
+    TEST_ASSERT_NOT_NULL(test);
+    bstr_set_all(test, true);
+    for (int j = bstr_get_bit_capacity(test) - 1; j >= 0; j--) {
+      bstr_clr(test, j);
+      TEST_ASSERT_EQUAL_INT(j, bstr_ffus(test));
+      bstr_set(test, j);
+    }
+    bstr_delete_bitstr(test);
+  }
+}
+
+int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_bstr_create_and_delete_bitstr);
   RUN_TEST(test_bstr_resize);
@@ -248,6 +262,7 @@ void main(void) {
   RUN_TEST(test_bstr_ctz);
   RUN_TEST(test_bstr_clz);
   RUN_TEST(test_bstr_popcnt);
+  RUN_TEST(test_bstr_ffus);
   UNITY_END();
 }
 

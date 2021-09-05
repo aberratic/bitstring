@@ -207,6 +207,25 @@ int bstr_ffs(const bstr_bitstr_t *const bstr) {
   return -1;
 }
 
+int bstr_ffus(const bstr_bitstr_t *const bstr) {
+#ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+  assert(bstr != NULL);
+#endif
+  unsigned int *targetptr = bstr->_bits + bstr->_capacity;
+  int offset = 0;
+  for (unsigned int *i = bstr->_bits; i < targetptr; i++) {
+    if (*i == UINT_MAX) {
+      offset += sizeof(unsigned int) * 8;
+      continue;
+    }
+    for (int bit = offset; bit != bstr_get_bit_capacity(bstr); bit++) {
+      if (!bstr_get(bstr, bit))
+        return bit;
+    }
+  }
+  return -1;
+}
+
 int bstr_ctz(const bstr_bitstr_t *const bstr) {
 #ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
   assert(bstr != NULL);
