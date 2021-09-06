@@ -106,7 +106,7 @@ bstr_bitstr_t *bstr_create_bitstr(unsigned int capacity);
  *
  * @param bstr Pointer to bitstring object.
  */
-void bstr_delete_bitstr(bstr_bitstr_t *bstr);
+void bstr_delete_bitstr(bstr_bitstr_t *bstr) __attribute__((nonnull(1)));
 
 /**
  * @brief Resize the bitstring.
@@ -115,7 +115,8 @@ void bstr_delete_bitstr(bstr_bitstr_t *bstr);
  * @param capacity Number of unsigned ints that store bits.
  * capacity * sizeof(unsigned int) * 8 == capacity for bit storage.
  */
-bstr_err_t bstr_resize(bstr_bitstr_t *const bstr, unsigned int capacity);
+bstr_err_t bstr_resize(bstr_bitstr_t *const bstr, unsigned int capacity)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Returns the number of unsigned ints that are allocated
@@ -123,7 +124,8 @@ bstr_err_t bstr_resize(bstr_bitstr_t *const bstr, unsigned int capacity);
  * @param bstr Pointer to bitstring object.
  * @return unsigned int
  */
-unsigned int bstr_get_capacity(const bstr_bitstr_t *const bstr);
+unsigned int bstr_get_capacity(const bstr_bitstr_t *const bstr)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Returns the number of bits that are stored here
@@ -131,7 +133,8 @@ unsigned int bstr_get_capacity(const bstr_bitstr_t *const bstr);
  * @param bstr Pointer to bitstring object
  * @return unsigned int
  */
-unsigned int bstr_get_bit_capacity(const bstr_bitstr_t *const bstr);
+unsigned int bstr_get_bit_capacity(const bstr_bitstr_t *const bstr)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Returns the size of a formatted string which would print the complete
@@ -140,7 +143,8 @@ unsigned int bstr_get_bit_capacity(const bstr_bitstr_t *const bstr);
  * @param bstr Pointer to bitstring object
  * @return size_t
  */
-size_t bstr_to_string_size(const bstr_bitstr_t *const bstr);
+size_t bstr_to_string_size(const bstr_bitstr_t *const bstr)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Returns a long list of zeros and ones. Call bstr_to_string_size()
@@ -149,7 +153,8 @@ size_t bstr_to_string_size(const bstr_bitstr_t *const bstr);
  * @param bstr
  * @param str
  */
-void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str);
+void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str)
+    __attribute__((nonnull(1, 2)));
 
 /**
  * @brief Prints a fancy dump line by line. The linesize is statically known and
@@ -167,7 +172,7 @@ void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str);
  * @param line Linenumber to print. Has to be < bstr_get_capacity()
  */
 void bstr_bindump(const bstr_bitstr_t *const bstr, char *const str,
-                  const unsigned int line);
+                  const unsigned int line) __attribute__((nonnull(1, 2)));
 
 /**
  * @brief Set a bit in bitstring.
@@ -176,7 +181,8 @@ void bstr_bindump(const bstr_bitstr_t *const bstr, char *const str,
  * @param bit Number of the bit which will be set. Will panic when a out of
  * bounds access happens.
  */
-void bstr_set(bstr_bitstr_t *const bstr, unsigned int bit);
+void bstr_set(bstr_bitstr_t *const bstr, unsigned int bit)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Set all bits to the value of @param on.
@@ -184,7 +190,8 @@ void bstr_set(bstr_bitstr_t *const bstr, unsigned int bit);
  * @param bstr Pointer to bitstring object.
  * @param on Wheter all bits should be set or not.
  */
-void bstr_set_all(bstr_bitstr_t *const bstr, bool on);
+void bstr_set_all(bstr_bitstr_t *const bstr, bool on)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Clears a bit in bitstring.
@@ -194,7 +201,8 @@ void bstr_set_all(bstr_bitstr_t *const bstr, bool on);
  * bounds access happens.
  *
  */
-void bstr_clr(bstr_bitstr_t *const bstr, unsigned int bit);
+void bstr_clr(bstr_bitstr_t *const bstr, unsigned int bit)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Check if a bit is set.
@@ -206,7 +214,8 @@ void bstr_clr(bstr_bitstr_t *const bstr, unsigned int bit);
  * @return - true   when set
  *         - false  when not set
  */
-bool bstr_get(const bstr_bitstr_t *const bstr, unsigned int bit);
+bool bstr_get(const bstr_bitstr_t *const bstr, unsigned int bit)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Find the first set bit.
@@ -214,7 +223,7 @@ bool bstr_get(const bstr_bitstr_t *const bstr, unsigned int bit);
  * @param bstr Pointer to bitstring object.
  * @return int Index of the first set bit or -1 when there was none.
  */
-int bstr_ffs(const bstr_bitstr_t *const bstr);
+int bstr_ffs(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 /**
  * @brief Find the first unset bit.
@@ -222,7 +231,7 @@ int bstr_ffs(const bstr_bitstr_t *const bstr);
  * @param bstr Pointer to bitstring object.
  * @return int Index of the first unset bit or -1 when there was none.
  */
-int bstr_ffus(const bstr_bitstr_t *const bstr);
+int bstr_ffus(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 /**
  * @brief Count trailing zeros.
@@ -230,7 +239,7 @@ int bstr_ffus(const bstr_bitstr_t *const bstr);
  * @param bstr Pointer to bitstring object.
  * @return int Count of trailing zeros.
  */
-int bstr_ctz(const bstr_bitstr_t *const bstr);
+int bstr_ctz(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 /**
  * @brief Count leading zeros.
@@ -238,7 +247,7 @@ int bstr_ctz(const bstr_bitstr_t *const bstr);
  * @param bstr Pointer to bitstring object.
  * @return int Count of leading zeros.
  */
-int bstr_clz(const bstr_bitstr_t *const bstr);
+int bstr_clz(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 /**
  * @brief Count how many bits are set.
@@ -246,7 +255,7 @@ int bstr_clz(const bstr_bitstr_t *const bstr);
  * @param bstr Pointer to bitstring object.
  * @return int How many bits are set.
  */
-int bstr_popcnt(const bstr_bitstr_t *const bstr);
+int bstr_popcnt(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 #ifdef __cplusplus
 }
