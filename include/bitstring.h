@@ -58,12 +58,12 @@ typedef enum bstr_err_t {
    * @brief No error occured
    *
    */
-  NO_ERROR = 0,
+  BSTR_NO_ERROR = 0,
   /**
    * @brief Memory allocation failed
    *
    */
-  MALLOC_FAILED = -1,
+  BSTR_MALLOC_FAILED = -1,
 } bstr_err_t;
 
 /**
