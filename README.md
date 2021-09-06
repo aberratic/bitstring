@@ -21,7 +21,7 @@ the configuration below.
 ### Add as platformio dependency
 Add to your platformio.ini the following line:
 ```ini
-lib_deps = aberratic/Bitstring @ ^0.2.0
+lib_deps = aberratic/Bitstring @ ^1.0.0
 ```
 Furthermore to use menuconfig you need to add the following line to your
 project CMakeLists.txt
@@ -48,5 +48,8 @@ Just look into include/bitstring.h . It is well documented.
 
 | Version | Changes                                    |
 |---------|--------------------------------------------|
+| 1.0     | Renamed bstr_err_t variants                |
+|         | Added function attributes                  |
+|         | Added two unit tests for bstr_resize()     |
 | 0.2     | Added bstr_ffus(), to find first unset bit |
 | 0.1     | Initial Release                            |
