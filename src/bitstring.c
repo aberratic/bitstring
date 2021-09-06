@@ -67,23 +67,29 @@ bstr_err_t bstr_resize(bstr_bitstr_t *const bstr, unsigned int capacity) {
   assert(bstr != NULL);
   assert(capacity > 0);
 #endif
-  unsigned int *oldbits = bstr->_bits;
-  size_t new_capacity = capacity;
-  size_t old_capacity = bstr->_capacity;
-  unsigned int *newbits =
-      (unsigned int *)malloc(new_capacity * sizeof(unsigned int));
-  if (newbits == NULL)
-    return MALLOC_FAILED;
 
-  if (new_capacity >= old_capacity) {
-    memset(newbits, 0, new_capacity * sizeof(unsigned int));
-    memcpy(newbits, oldbits, old_capacity * sizeof(unsigned int));
+  if (capacity == bstr->_capacity)
+    return BSTR_NO_ERROR;
+
+  unsigned int *newMem =
+      (unsigned int *)realloc(bstr->_bits, capacity * sizeof(unsigned int));
+  if (newMem == NULL)
+    return BSTR_MALLOC_FAILED;
+
+  if (capacity < bstr->_capacity) {
+    bstr->_bits = newMem;
+    bstr->_capacity = capacity;
+    return BSTR_NO_ERROR;
   } else {
-    memcpy(newbits, oldbits, new_capacity * sizeof(unsigned int));
+    bstr->_bits = newMem;
+    for (int i = bstr->_capacity; i != capacity; i++) {
+      unsigned int *target = bstr->_bits + i;
+      *target = 0;
+    }
+    bstr->_capacity = capacity;
+    return BSTR_NO_ERROR;
   }
-  bstr->_capacity = new_capacity;
-  bstr->_bits = newbits;
-  return NO_ERROR;
+  return BSTR_NO_ERROR;
 }
 
 unsigned int bstr_get_capacity(const bstr_bitstr_t *const bstr) {
