@@ -45,11 +45,36 @@ void test_bstr_resize(void) {
     bstr_bitstr_t *test = bstr_create_bitstr(i);
     TEST_ASSERT_NOT_NULL(test);
     TEST_ASSERT_EQUAL_INT(i, bstr_get_capacity(test));
-    TEST_ASSERT_EQUAL_INT(NO_ERROR, bstr_resize(test, i * 2));
+    bstr_set_all(test, true);
+    int popcnt = bstr_popcnt(test);
+    TEST_ASSERT_EQUAL_INT(BSTR_NO_ERROR, bstr_resize(test, i * 2));
+    TEST_ASSERT_EQUAL_INT(popcnt, bstr_popcnt(test));
     TEST_ASSERT_EQUAL_INT(i * 2, bstr_get_capacity(test));
+    bstr_set_all(test, false);
     TEST_ASSERT_EQUAL_INT(0, bstr_popcnt(test));
     bstr_delete_bitstr(test);
   }
+}
+
+void test_bstr_resize_with_same_size(void) {
+  bstr_bitstr_t *sameSize = bstr_create_bitstr(32);
+  TEST_ASSERT_NOT_NULL(sameSize);
+  TEST_ASSERT_EQUAL_INT(32, bstr_get_capacity(sameSize));
+  TEST_ASSERT_EQUAL_INT(BSTR_NO_ERROR, bstr_resize(sameSize, 32));
+  TEST_ASSERT_EQUAL_INT(32, bstr_get_capacity(sameSize));
+  bstr_delete_bitstr(sameSize);
+}
+
+void test_bstr_resize_with_smaller_size(void) {
+  bstr_bitstr_t *shrink = bstr_create_bitstr(64);
+  TEST_ASSERT_NOT_NULL(shrink);
+  TEST_ASSERT_EQUAL_INT(64, bstr_get_capacity(shrink));
+  bstr_set_all(shrink, true);
+  int popcnt = bstr_popcnt(shrink);
+  bstr_resize(shrink, 32);
+  TEST_ASSERT_EQUAL_INT(32, bstr_get_capacity(shrink));
+  TEST_ASSERT_EQUAL_INT(popcnt / 2, bstr_popcnt(shrink));
+  bstr_delete_bitstr(shrink);
 }
 
 void test_bstr_get_capacity(void) {
@@ -250,6 +275,8 @@ int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_bstr_create_and_delete_bitstr);
   RUN_TEST(test_bstr_resize);
+  RUN_TEST(test_bstr_resize_with_same_size);
+  RUN_TEST(test_bstr_resize_with_smaller_size);
   RUN_TEST(test_bstr_get_capacity);
   RUN_TEST(test_bstr_get_bit_capacity);
   RUN_TEST(test_bstr_to_string_size);
