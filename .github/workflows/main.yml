@@ -31,4 +31,12 @@ jobs:
       run: pio platform install native
     - name: Run PlatformIO
       run: pio test -e native
+    - name: Run examples
+      run: |
+        pio ci --verbose --project-conf platformio.ini --keep-build-dir --build-dir="/tmp/bitstring_ci_build" --lib="." examples/Dynamic\ Sized/dynamic_sized_example.c
+        /tmp/bitstring_ci_build/.pio/build/native/program
+        rm -rf /tmp/bitstring_ci_build/.pio/build/native/program
+        pio ci --verbose --project-conf platformio.ini --keep-build-dir --build-dir="/tmp/bitstring_ci_build" --lib="." examples/Static\ Sized/static_sized_example.c
+        /tmp/bitstring_ci_build/.pio/build/native/program
+        rm -rf /tmp/bitstring_ci_build/.pio/build/native/program
 
