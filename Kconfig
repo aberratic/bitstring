@@ -23,7 +23,7 @@
 
 menu "Bitstring"
 
-config BITSTREAM_ENABLE_BOUND_CHECKS
+config BITSTRING_ENABLE_BOUND_CHECKS
     bool "Enable checks for out of bound access."
     help
         Enable this setting to let your app crash when a OOB acess occurs.

@@ -33,7 +33,7 @@ list(APPEND EXTRA_COMPONENT_DIRS ".pio/libdeps/esp32dev/Bitstring")
 ## Configuration
 There is one compile time configuration value:
 
-CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
 
 This setting enable out of bound checks. When a OOB access occurs and this
 setting is enabled the app will panic.

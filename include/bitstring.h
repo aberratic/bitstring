@@ -33,7 +33,7 @@ SOFTWARE.
 #include "stdlib.h"
 #include "string.h"
 #include "strings.h"
-#ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+#ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
 #include "assert.h"
 #endif
 
