@@ -1,5 +1,6 @@
 # Bitstring
-This is a small library for creating and manipulating arbitrarily sized bitstrings.
+This is a small library for creating and manipulating arbitrarily sized bitstrings. There is support for static sized (and stack allocated) aswell
+as heap allocated (and resizable) bitstrings.
 It is published at [platformio](https://platformio.org) and has all batteries
 included to work with ESP-IDF.
 
@@ -43,13 +44,19 @@ I recommend to enable this setting.
 
 ## How to use the library
 Just look into include/bitstring.h . It is well documented.
+There are also examples in the examples directory.
 
 ## Changelog
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| 1.0     | Renamed bstr_err_t variants                |
-|         | Added function attributes                  |
-|         | Added two unit tests for bstr_resize()     |
-| 0.2     | Added bstr_ffus(), to find first unset bit |
-| 0.1     | Initial Release                            |
+| Version | Changes                                      |
+|---------|----------------------------------------------|
+| 2.0     | Renamed CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS |
+|         | to CONFIG_BITSTRING_ENABLE_BOUND_CHECKS      |
+|         | Added support for stack allocated / static   |
+|         | sized bitstrings                             |
+|         | Added examples                               |
+| 1.0     | Renamed bstr_err_t variants                  |
+|         | Added function attributes                    |
+|         | Added two unit tests for bstr_resize()       |
+| 0.2     | Added bstr_ffus(), to find first unset bit   |
+| 0.1     | Initial Release                              |
