@@ -71,7 +71,9 @@ void test_bstr_resize_with_smaller_size(void) {
   TEST_ASSERT_EQUAL_INT(64, bstr_get_capacity(shrink));
   bstr_set_all(shrink, true);
   int popcnt = bstr_popcnt(shrink);
-  bstr_resize(shrink, 32);
+  if (bstr_resize(shrink, 32) != BSTR_NO_ERROR) {
+    TEST_FAIL_MESSAGE("bstr_resize failed");
+  }
   TEST_ASSERT_EQUAL_INT(32, bstr_get_capacity(shrink));
   TEST_ASSERT_EQUAL_INT(popcnt / 2, bstr_popcnt(shrink));
   bstr_delete_bitstr(shrink);
