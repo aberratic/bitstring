@@ -29,8 +29,8 @@ extern "C" {
 #endif
 
 static inline unsigned int *
-bstr_get_int_for_bit_index(const bstr_bitstr_t *const bstr, unsigned int bit) {
-  return (bstr->_bits + (bit / (sizeof(unsigned int) * 8)));
+_bstr_get_int_for_bit_index(const bstr_bitstr_t *const bstr, unsigned int bit) {
+  return (bstr->_bits + (bit / (sizeof(unsigned int) * CHAR_BIT)));
 }
 
 #ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
@@ -95,22 +95,22 @@ bstr_err_t bstr_resize(bstr_bitstr_t *const bstr, unsigned int capacity) {
 }
 
 unsigned int bstr_get_capacity(const bstr_bitstr_t *const bstr) {
-#ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+#ifdef DEBUG
   assert(bstr != NULL);
 #endif
   return bstr->_capacity;
 }
 
 unsigned int bstr_get_bit_capacity(const bstr_bitstr_t *const bstr) {
-#ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+#ifdef DEBUG
   assert(bstr != NULL);
 #endif
-  return bstr->_capacity * sizeof(unsigned int) * 8;
+  return bstr->_capacity * sizeof(unsigned int) * CHAR_BIT;
 }
 
 size_t bstr_to_string_size(const bstr_bitstr_t *const bstr) {
   //                                   bits per byte    trailing \0
-  return (bstr->_capacity * sizeof(unsigned int) * 8) + 1;
+  return (bstr->_capacity * sizeof(unsigned int) * CHAR_BIT) + 1;
 }
 
 void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str) {
@@ -140,15 +140,15 @@ void bstr_bindump(const bstr_bitstr_t *const bstr, char *const str,
   assert(!_bstr_is_ptr_out_of_bounds(bstr, target));
 #endif
   snprintf(str, BSTR_BINDUMP_SIZE, "%p:", target);
-  const unsigned int num_bits = sizeof(unsigned int) * 8;
+  const unsigned int num_bits = sizeof(unsigned int) * CHAR_BIT;
   for (unsigned int bit = num_bits; bit > 0; bit--) {
     unsigned int bitval = ((*target) >> (bit - 1)) & 1U;
-    if (bit % 8 == 0)
-      strncat(str, " ", 2);
+    if (bit % CHAR_BIT == 0)
+      strncat(str, " ", 1);
     if (bitval > 0) {
-      strncat(str, "1", 2);
+      strncat(str, "1", 1);
     } else {
-      strncat(str, "0", 2);
+      strncat(str, "0", 1);
     }
   }
 }
@@ -161,7 +161,7 @@ void bstr_set(bstr_bitstr_t *const bstr, unsigned int bit) {
 #ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
   assert(!_bstr_is_ptr_out_of_bounds(bstr, target));
 #endif
-  unsigned int bit_to_set = bit % (sizeof(unsigned int) * 8);
+  unsigned int bit_to_set = bit % (sizeof(unsigned int) * CHAR_BIT);
   *target |= 1 << bit_to_set;
   return;
 }
@@ -184,7 +184,7 @@ void bstr_clr(bstr_bitstr_t *const bstr, unsigned int bit) {
 #ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
   assert(!_bstr_is_ptr_out_of_bounds(bstr, target));
 #endif
-  unsigned int bit_to_clear = bit % (sizeof(unsigned int) * 8);
+  unsigned int bit_to_clear = bit % (sizeof(unsigned int) * CHAR_BIT);
   *target &= ~(1 << bit_to_clear);
 }
 
@@ -196,7 +196,7 @@ bool bstr_get(const bstr_bitstr_t *const bstr, unsigned int bit) {
 #ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
   assert(!_bstr_is_ptr_out_of_bounds(bstr, target));
 #endif
-  unsigned int bit_to_get = bit % (sizeof(unsigned int) * 8);
+  unsigned int bit_to_get = bit % (sizeof(unsigned int) * CHAR_BIT);
   unsigned int result = ((*target) >> bit_to_get) & 1U;
   if (result > 0) {
     return true;
@@ -217,7 +217,7 @@ int bstr_ffs(const bstr_bitstr_t *const bstr) {
 #endif
     int result = ffs(*i);
     if (result > 0)
-      return (offset * sizeof(unsigned int) * 8) + result - 1;
+      return (offset * sizeof(unsigned int) * CHAR_BIT) + result - 1;
     offset++;
   }
   return -1;
@@ -234,7 +234,7 @@ int bstr_ffus(const bstr_bitstr_t *const bstr) {
     assert(!_bstr_is_ptr_out_of_bounds(bstr, i));
 #endif
     if (*i == UINT_MAX) {
-      offset += sizeof(unsigned int) * 8;
+      offset += sizeof(unsigned int) * CHAR_BIT;
       continue;
     }
     for (int bit = offset; bit != bstr_get_bit_capacity(bstr); bit++) {
@@ -246,14 +246,17 @@ int bstr_ffus(const bstr_bitstr_t *const bstr) {
 }
 
 int bstr_ctz(const bstr_bitstr_t *const bstr) {
-#ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+#ifdef DEBUG
   assert(bstr != NULL);
 #endif
   unsigned int *targetptr = bstr->_bits + bstr->_capacity;
   int result = 0;
   for (unsigned int *i = bstr->_bits; i < targetptr; i++) {
+#ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
+    assert(!_bstr_is_ptr_out_of_bounds(bstr, i));
+#endif
     if (*i == 0) {
-      result += sizeof(unsigned int) * 8;
+      result += sizeof(unsigned int) * CHAR_BIT;
       continue;
     }
     result += __builtin_ctz(*i);
@@ -263,14 +266,17 @@ int bstr_ctz(const bstr_bitstr_t *const bstr) {
 }
 
 int bstr_clz(const bstr_bitstr_t *const bstr) {
-#ifdef CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS
+#ifdef DEBUG
   assert(bstr != NULL);
 #endif
   unsigned int *baseptr = bstr->_bits + bstr->_capacity - 1;
   int result = 0;
   for (unsigned int *i = baseptr; i >= bstr->_bits; i--) {
+#ifdef CONFIG_BITSTRING_ENABLE_BOUND_CHECKS
+    assert(!_bstr_is_ptr_out_of_bounds(bstr, i));
+#endif
     if (*i == 0) {
-      result += sizeof(unsigned int) * 8;
+      result += sizeof(unsigned int) * CHAR_BIT;
       continue;
     } else {
       return result + __builtin_clz(*i);
