@@ -25,6 +25,7 @@ SOFTWARE.
 #ifndef BSTR_BITSTRING_H
 #define BSTR_BITSTRING_H
 
+#include "bitstring_common.h"
 #include "limits.h"
 #include "stdbool.h"
 #include "stddef.h"
