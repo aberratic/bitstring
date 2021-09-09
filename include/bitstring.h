@@ -42,14 +42,6 @@ extern "C" {
 #endif
 
 /**
- * @brief How much space you have to allocate for one line of bindump.
- *
- */
-#define BSTR_BINDUMP_SIZE                                                      \
-  ((sizeof(char *) * 2) + 2) + 2 + (sizeof(unsigned int) * 8) +                \
-      sizeof(unsigned int) + 2
-
-/**
  * @brief A descriptive error type for all operation which could fail.
  *
  */
@@ -68,7 +60,7 @@ typedef enum bstr_err_t {
 
 /**
  * @brief This is the main bit string object. Create it with
- * <bstr_create_bitstr> to ensure correct initialization.
+ * bstr_create_bitstr() to ensure correct initialization.
  * Delete it with bstr_delete_bitstr().
  *
  */
@@ -96,9 +88,11 @@ typedef struct bstr_bitstr_t {
  * @param capacity Number of unsigned int that are going to be allocated.
  * capacity * sizeof(unsigned int) * 8 == capacity for bit storage.
  *
- * @return bstr_bitstr_t*
+ * @return bstr_bitstr_t* Pointer to bitstring object or NULL when no memory is
+ * left.
  */
-bstr_bitstr_t *bstr_create_bitstr(unsigned int capacity);
+bstr_bitstr_t *bstr_create_bitstr(unsigned int capacity)
+    __attribute__((warn_unused_result));
 
 /**
  * @brief Free all allocated datastructures. Do not use the bstr pointer
@@ -116,7 +110,7 @@ void bstr_delete_bitstr(bstr_bitstr_t *bstr) __attribute__((nonnull(1)));
  * capacity * sizeof(unsigned int) * 8 == capacity for bit storage.
  */
 bstr_err_t bstr_resize(bstr_bitstr_t *const bstr, unsigned int capacity)
-    __attribute__((nonnull(1)));
+    __attribute__((nonnull(1), warn_unused_result));
 
 /**
  * @brief Returns the number of unsigned ints that are allocated
@@ -150,8 +144,8 @@ size_t bstr_to_string_size(const bstr_bitstr_t *const bstr)
  * @brief Returns a long list of zeros and ones. Call bstr_to_string_size()
  * first to get the needed buffer size.
  *
- * @param bstr
- * @param str
+ * @param bstr Pointer to bitstring object
+ * @param str Pointer to a string with at least bstr_to_string_size() size
  */
 void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str)
     __attribute__((nonnull(1, 2)));
@@ -179,7 +173,7 @@ void bstr_bindump(const bstr_bitstr_t *const bstr, char *const str,
  *
  * @param bstr Pointer to bitstring object.
  * @param bit Number of the bit which will be set. Will panic when a out of
- * bounds access happens.
+ * bounds access happens. Bits are zero indexed.
  */
 void bstr_set(bstr_bitstr_t *const bstr, unsigned int bit)
     __attribute__((nonnull(1)));
@@ -198,7 +192,7 @@ void bstr_set_all(bstr_bitstr_t *const bstr, bool on)
  *
  * @param bstr Pointer to bitstring object.
  * @param bit Number of the bit which will be set. Will panic when a out of
- * bounds access happens.
+ * bounds access happens. Bits are zero indexed.
  *
  */
 void bstr_clr(bstr_bitstr_t *const bstr, unsigned int bit)
@@ -209,7 +203,7 @@ void bstr_clr(bstr_bitstr_t *const bstr, unsigned int bit)
  *
  * @param bstr Pointer to bitstring object.
  * @param bit Number of the bit which will be set. Will panic when a out of
- * bounds access happens.
+ * bounds access happens. Bits are zero indexed.
  *
  * @return - true   when set
  *         - false  when not set
@@ -234,7 +228,7 @@ int bstr_ffs(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 int bstr_ffus(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 /**
- * @brief Count trailing zeros.
+ * @brief Count trailing zeros. Starts at the least significant bit position.
  *
  * @param bstr Pointer to bitstring object.
  * @return int Count of trailing zeros.
@@ -242,7 +236,7 @@ int bstr_ffus(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 int bstr_ctz(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
 /**
- * @brief Count leading zeros.
+ * @brief Count leading zeros. Starts at the most significant bit position.
  *
  * @param bstr Pointer to bitstring object.
  * @return int Count of leading zeros.
