@@ -114,10 +114,7 @@ size_t bstr_to_string_size(const bstr_bitstr_t *const bstr) {
 }
 
 void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str) {
-  const char one[] = "1";
-  const char zero[] = "0";
   const unsigned int len = bstr_get_bit_capacity(bstr);
-  const unsigned int destlen = len + 1;
   for (unsigned int i = 0; i != len; i++) {
     if (bstr_get(bstr, i)) {
       strncat(str, "1", 2);

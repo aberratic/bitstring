@@ -58,17 +58,20 @@ void test_bstrs_create(void) {
 
 void test_bstrs_get_capacity(void) {
   bstr_static_t(64) test = bstrs_initialize;
+  (void)test;
   TEST_ASSERT_EQUAL_INT(64, bstrs_get_capacity(64));
 }
 
 void test_bstrs_get_bit_capacity(void) {
   bstr_static_t(64) test = bstrs_initialize;
+  (void)test;
   TEST_ASSERT_EQUAL_INT(64 * sizeof(unsigned int) * 8,
                         bstrs_get_bit_capacity(64));
 }
 
 void test_bstrs_to_string_size(void) {
   bstr_static_t(64) test = bstrs_initialize;
+  (void)test;
   TEST_ASSERT_EQUAL_INT((64 * sizeof(unsigned int) * 8) + 1,
                         bstrs_to_string_size(64));
 }
