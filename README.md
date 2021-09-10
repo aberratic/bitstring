@@ -50,6 +50,7 @@ There are also examples in the examples directory.
 
 | Version | Changes                                                            |
 |---------|--------------------------------------------------------------------|
+| 2.0.1   | Switched from strncat to strlcat                                   |
 | 2.0     | Renamed CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS to                    |
 |         | CONFIG_BITSTRING_ENABLE_BOUND_CHECKS                               |
 |         | Added support for stack allocated / static sized bitstrings        |

@@ -116,12 +116,13 @@ size_t bstr_to_string_size(const bstr_bitstr_t *const bstr) {
 void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str) {
   const char one = '1';
   const char zero = '0';
-  unsigned int len = bstr_get_bit_capacity(bstr);
+  const unsigned int len = bstr_get_bit_capacity(bstr);
+  const unsigned int destlen = len + 1;
   for (unsigned int i = 0; i != len; i++) {
     if (bstr_get(bstr, i)) {
-      strncat(str, &one, 1);
+      strlcat(str, &one, destlen);
     } else {
-      strncat(str, &zero, 1);
+      strlcat(str, &zero, destlen);
     }
   }
 }
@@ -141,14 +142,17 @@ void bstr_bindump(const bstr_bitstr_t *const bstr, char *const str,
 #endif
   snprintf(str, BSTR_BINDUMP_SIZE, "%p:", target);
   const unsigned int num_bits = sizeof(unsigned int) * CHAR_BIT;
+  const char one = '1';
+  const char zero = '0';
+  const char space = ' ';
   for (unsigned int bit = num_bits; bit > 0; bit--) {
     unsigned int bitval = ((*target) >> (bit - 1)) & 1U;
     if (bit % CHAR_BIT == 0)
-      strncat(str, " ", 1);
+      strlcat(str, &space, BSTR_BINDUMP_SIZE);
     if (bitval > 0) {
-      strncat(str, "1", 1);
+      strlcat(str, &one, BSTR_BINDUMP_SIZE);
     } else {
-      strncat(str, "0", 1);
+      strlcat(str, &zero, BSTR_BINDUMP_SIZE);
     }
   }
 }
