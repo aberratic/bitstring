@@ -120,9 +120,9 @@ void bstr_to_string(const bstr_bitstr_t *const bstr, char *const str) {
   const unsigned int destlen = len + 1;
   for (unsigned int i = 0; i != len; i++) {
     if (bstr_get(bstr, i)) {
-      strncat(str, (const char *)&one, sizeof(one));
+      strncat(str, "1", sizeof "1");
     } else {
-      strncat(str, (const char *)&zero, sizeof(zero));
+      strncat(str, "0", sizeof "0");
     }
   }
 }
@@ -142,17 +142,14 @@ void bstr_bindump(const bstr_bitstr_t *const bstr, char *const str,
 #endif
   snprintf(str, BSTR_BINDUMP_SIZE, "%p:", target);
   const unsigned int num_bits = sizeof(unsigned int) * CHAR_BIT;
-  const char one[] = "1";
-  const char zero[] = "0";
-  const char space[] = " ";
   for (unsigned int bit = num_bits; bit > 0; bit--) {
     unsigned int bitval = ((*target) >> (bit - 1)) & 1U;
     if (bit % CHAR_BIT == 0)
-      strncat(str, (const char *)&space, sizeof(space));
+      strncat(str, " ", sizeof " ");
     if (bitval > 0) {
-      strncat(str, (const char *)&one, sizeof(one));
+      strncat(str, "1", sizeof "1");
     } else {
-      strncat(str, (const char *)&zero, sizeof(zero));
+      strncat(str, "0", sizeof "0");
     }
   }
 }
