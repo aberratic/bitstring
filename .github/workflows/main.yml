@@ -31,7 +31,7 @@ jobs:
       run: pio platform install native
     - name: Run PlatformIO
       run: pio test -e native
-    -name: Print version numbers
+    - name: Print version numbers
       run: |
         gcc --version
         pio --version
