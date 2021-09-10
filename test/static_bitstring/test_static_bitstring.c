@@ -42,6 +42,8 @@ BSTR_STATIC_DECLARE_FFUS(64);
 BSTR_STATIC_DECLARE_CTZ(64);
 BSTR_STATIC_DECLARE_CLZ(64);
 BSTR_STATIC_DECLARE_POPCNT(64);
+BSTR_STATIC_DECLARE_NEXT_SET_BIT(64);
+BSTR_STATIC_DECLARE_NEXT_UNSET_BIT(64);
 
 void bitdump(const bstr_bitstr64_t *const bstr) {
   char bdump[BSTR_BINDUMP_SIZE] = {0};
@@ -168,6 +170,43 @@ void test_bstrs_ffus(void) {
   }
 }
 
+void test_bstrs_next_set_bit(void) {
+  bstr_static_t(64) test = bstrs_initialize;
+  for (int i = 0; i < bstrs_get_bit_capacity(64); i++) {
+    if (i % 2 == 0)
+      bstrs_set(64, &test, i);
+  }
+  int index = 0;
+  int next = 0;
+  for (;;) {
+    index = bstrs_next_set_bit(64, &test, next);
+    next = index + 1;
+    if (index == -1)
+      break;
+    if (index % 2 != 0)
+      TEST_FAIL_MESSAGE("Got invalid bit index from next set bit function");
+  }
+}
+
+void test_bstrs_next_unset_bit(void) {
+  bstr_static_t(64) test = bstrs_initialize;
+  bstrs_set_all(64, &test, true);
+  for (int i = 0; i < bstrs_get_bit_capacity(64); i++) {
+    if (i % 2 == 0)
+      bstrs_clr(64, &test, i);
+  }
+  int index = 0;
+  int next = 0;
+  for (;;) {
+    index = bstrs_next_unset_bit(64, &test, next);
+    next = index + 1;
+    if (index == -1)
+      break;
+    if (index % 2 != 0)
+      TEST_FAIL_MESSAGE("Got invalid bit index from next set bit function");
+  }
+}
+
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_bstrs_create);
@@ -182,6 +221,8 @@ int main(void) {
   RUN_TEST(test_bstrs_popcnt);
   RUN_TEST(test_bstrs_ffus);
   RUN_TEST(test_bstrs_clz);
+  RUN_TEST(test_bstrs_next_set_bit);
+  RUN_TEST(test_bstrs_next_unset_bit);
   UNITY_END();
 }
 

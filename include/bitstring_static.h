@@ -281,6 +281,36 @@ SOFTWARE.
   }
 
 /**
+ * @brief Macro to declare a _next_set_bit function for a sized bitstring.
+ *
+ * @param size How many unsigned ints this bitstring contains.
+ */
+#define BSTR_STATIC_DECLARE_NEXT_SET_BIT(size)                                 \
+  __attribute__((nonnull(1))) int bstr##size##_next_set_bit(                   \
+      const bstr_bitstr##size##_t *const bstr, unsigned int offset) {          \
+    for (unsigned int i = offset; i < bstrs_get_bit_capacity(size); i++) {     \
+      if (bstr##size##_get(bstr, i))                                           \
+        return i;                                                              \
+    }                                                                          \
+    return -1;                                                                 \
+  }
+
+/**
+ * @brief Macro to declare a _next_unset_bit function for a sized bitstring.
+ *
+ * @param size How many unsigned ints this bitstring contains.
+ */
+#define BSTR_STATIC_DECLARE_NEXT_UNSET_BIT(size)                               \
+  __attribute__((nonnull(1))) int bstr##size##_next_unset_bit(                 \
+      const bstr_bitstr##size##_t *const bstr, unsigned int offset) {          \
+    for (unsigned int i = offset; i < bstrs_get_bit_capacity(size); i++) {     \
+      if (!bstr##size##_get(bstr, i))                                          \
+        return i;                                                              \
+    }                                                                          \
+    return -1;                                                                 \
+  }
+
+/**
  * @brief A convinience macro to declare a complete sized bitstring
  * implemenation. This is the recommended way of creating a static sized
  * bitstring. If you want to use it at several different places you may
@@ -302,7 +332,9 @@ SOFTWARE.
   BSTR_STATIC_DECLARE_FFUS(size);                                              \
   BSTR_STATIC_DECLARE_CTZ(size);                                               \
   BSTR_STATIC_DECLARE_CLZ(size);                                               \
-  BSTR_STATIC_DECLARE_POPCNT(size);
+  BSTR_STATIC_DECLARE_POPCNT(size);                                            \
+  BSTR_STATIC_DECLARE_NEXT_SET_BIT(size);                                      \
+  BSTR_STATIC_DECLARE_NEXT_UNSET_BIT(size);
 
 /**
  * @brief Macro that creates the rvalue for a sized bitstream initialization
@@ -449,4 +481,26 @@ SOFTWARE.
  * @return int Number of set bits.
  */
 #define bstrs_popcnt(size, bst) bstr##size##_popcnt(bst)
+
+/**
+ * @brief Macro that creates a typesafe functio call to _next_set_bit . Get the
+ * index of the next set bit based upon the offset.
+ *
+ * @param size How many unsigned ints this bitstring contains.
+ * @param bst const bst *const Pointer to the bitstring object.
+ * @param offset Where to begin the search.
+ */
+#define bstrs_next_set_bit(size, bst, offset)                                  \
+  bstr##size##_next_set_bit(bst, offset)
+
+/**
+ * @brief Macro that creates a typesafe functio call to _next_unset_bit . Get
+ * the index of the next unset bit based upon the offset.
+ *
+ * @param size How many unsigned ints this bitstring contains.
+ * @param bst const bst *const Pointer to the bitstring object.
+ * @param offset Where to begin the search.
+ */
+#define bstrs_next_unset_bit(size, bst, offset)                                \
+  bstr##size##_next_unset_bit(bst, offset)
 #endif

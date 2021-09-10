@@ -273,6 +273,47 @@ void test_bstr_ffus(void) {
   }
 }
 
+void test_bstr_next_set_bit(void) {
+  for (unsigned int i = 1; i < TEST_BSTR_MAX_TEST_CAPACITY; i++) {
+    bstr_bitstr_t *test = bstr_create_bitstr(i);
+    for (int i = 0; i < bstr_get_bit_capacity(test); i++) {
+      if (i % 2 == 0)
+        bstr_set(test, i);
+    }
+    int index = 0;
+    int next = 0;
+    for (;;) {
+      index = bstr_next_set_bit(test, next);
+      next = index + 1;
+      if (index == -1)
+        break;
+      if (index % 2 != 0)
+        TEST_FAIL_MESSAGE("Got invalid bit index from next set bit function");
+    }
+  }
+}
+
+void test_bstr_next_unset_bit(void) {
+  for (unsigned int i = 1; i < TEST_BSTR_MAX_TEST_CAPACITY; i++) {
+    bstr_bitstr_t *test = bstr_create_bitstr(i);
+    bstr_set_all(test, true);
+    for (int i = 0; i < bstr_get_bit_capacity(test); i++) {
+      if (i % 2 == 0)
+        bstr_clr(test, i);
+    }
+    int index = 0;
+    int next = 0;
+    for (;;) {
+      index = bstr_next_unset_bit(test, next);
+      next = index + 1;
+      if (index == -1)
+        break;
+      if (index % 2 != 0)
+        TEST_FAIL_MESSAGE("Got invalid bit index from next set bit function");
+    }
+  }
+}
+
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_bstr_create_and_delete_bitstr);
@@ -292,6 +333,8 @@ int main(void) {
   RUN_TEST(test_bstr_clz);
   RUN_TEST(test_bstr_popcnt);
   RUN_TEST(test_bstr_ffus);
+  RUN_TEST(test_bstr_next_set_bit);
+  RUN_TEST(test_bstr_next_unset_bit);
   UNITY_END();
 }
 

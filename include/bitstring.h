@@ -252,6 +252,24 @@ int bstr_clz(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
  */
 int bstr_popcnt(const bstr_bitstr_t *const bstr) __attribute__((nonnull(1)));
 
+/**
+ * @brief Get the index of the next set bit based upon the offset.
+ *
+ * @param bstr Pointer to bitstring object.
+ * @param offset Where to begin the search. Has to be < get_bit_capacity()
+ */
+int bstr_next_set_bit(const bstr_bitstr_t *const bstr, unsigned int offset)
+    __attribute((nonnull(1)));
+
+/**
+ * @brief Get the index of the next unset bit based upon the offset.
+ *
+ * @param bstr Pointer to bitstring object.
+ * @param offset Where to begin the search. Has to be < get_bit_capacity()
+ */
+int bstr_next_unset_bit(const bstr_bitstr_t *const bstr, unsigned int offset)
+    __attribute((nonnull(1)));
+
 #ifdef __cplusplus
 }
 #endif

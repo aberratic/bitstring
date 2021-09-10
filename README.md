@@ -22,7 +22,7 @@ the configuration below.
 ### Add as platformio dependency
 Add to your platformio.ini the following line:
 ```ini
-lib_deps = aberratic/Bitstring @ ^2.0.4
+lib_deps = aberratic/Bitstring @ ^2.1.0
 ```
 Furthermore to use menuconfig you need to add the following line to your
 project CMakeLists.txt
@@ -50,6 +50,7 @@ There are also examples in the examples directory.
 
 | Version | Changes                                                            |
 |---------|--------------------------------------------------------------------|
+| 2.1.0   | Added functions to get indexes of the next set/unset bit           |
 | 2.0.4   | Minor cleanup of unused variables. Also enabled -Wall              |
 | 2.0.3   | Fixed a bug with false strncat string sizes.                       |
 | 2.0.2   |                                                                    |

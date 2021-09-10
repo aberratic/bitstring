@@ -298,6 +298,30 @@ int bstr_popcnt(const bstr_bitstr_t *const bstr) {
   return popcnt;
 }
 
+int bstr_next_set_bit(const bstr_bitstr_t *const bstr, unsigned int offset) {
+#ifdef DEBUG
+  assert(bstr != NULL);
+#endif
+  const unsigned int cap = bstr_get_bit_capacity(bstr);
+  for (unsigned int i = offset; i < cap; i++) {
+    if (bstr_get(bstr, i))
+      return i;
+  }
+  return -1;
+}
+
+int bstr_next_unset_bit(const bstr_bitstr_t *const bstr, unsigned int offset) {
+#ifdef DEBUG
+  assert(bstr != NULL);
+#endif
+  const unsigned int cap = bstr_get_bit_capacity(bstr);
+  for (unsigned int i = offset; i < cap; i++) {
+    if (!bstr_get(bstr, i))
+      return i;
+  }
+  return -1;
+}
+
 #ifdef __cplusplus
 }
 #endif
