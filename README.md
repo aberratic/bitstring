@@ -22,7 +22,7 @@ the configuration below.
 ### Add as platformio dependency
 Add to your platformio.ini the following line:
 ```ini
-lib_deps = aberratic/Bitstring @ ^2.0.2
+lib_deps = aberratic/Bitstring @ ^2.0.3
 ```
 Furthermore to use menuconfig you need to add the following line to your
 project CMakeLists.txt
@@ -50,8 +50,9 @@ There are also examples in the examples directory.
 
 | Version | Changes                                                            |
 |---------|--------------------------------------------------------------------|
-| 2.0.2   | Fixed a bug with false strncat string sizes. For sure              |
-| 2.0.1   | Fixed a bug with false strncat string sizes                        |
+| 2.0.3   | Fixed a bug with false strncat string sizes.                       |
+| 2.0.2   |                                                                    |
+| 2.0.1   |                                                                    |
 | 2.0     | Renamed CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS to                    |
 |         | CONFIG_BITSTRING_ENABLE_BOUND_CHECKS                               |
 |         | Added support for stack allocated / static sized bitstrings        |
