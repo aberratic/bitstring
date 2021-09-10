@@ -1,6 +1,6 @@
 {
   "name": "Bitstring",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A library to handle bitstrings with arbitrary size",
   "keywords": "datastructure, bit, bits, bitstring",
   "repository": {
