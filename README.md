@@ -22,7 +22,7 @@ the configuration below.
 ### Add as platformio dependency
 Add to your platformio.ini the following line:
 ```ini
-lib_deps = aberratic/Bitstring @ ^1.0.0
+lib_deps = aberratic/Bitstring @ ^2.0.0
 ```
 Furthermore to use menuconfig you need to add the following line to your
 project CMakeLists.txt
