@@ -43,20 +43,19 @@ If this setting is disabled and a OOB access occurs the behavior is undefined.
 I recommend to enable this setting.
 
 ## How to use the library
-Just look into include/bitstring.h . It is well documented.
+Just look into include/bitstring.h or bitstring/bitstring_static.h. It is well documented.
 There are also examples in the examples directory.
 
 ## Changelog
 
-| Version | Changes                                      |
-|---------|----------------------------------------------|
-| 2.0     | Renamed CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS |
-|         | to CONFIG_BITSTRING_ENABLE_BOUND_CHECKS      |
-|         | Added support for stack allocated / static   |
-|         | sized bitstrings                             |
-|         | Added examples                               |
-| 1.0     | Renamed bstr_err_t variants                  |
-|         | Added function attributes                    |
-|         | Added two unit tests for bstr_resize()       |
-| 0.2     | Added bstr_ffus(), to find first unset bit   |
-| 0.1     | Initial Release                              |
+| Version | Changes                                                            |
+|---------|--------------------------------------------------------------------|
+| 2.0     | Renamed CONFIG_BITSTREAM_ENABLE_BOUND_CHECKS to                    |
+|         | CONFIG_BITSTRING_ENABLE_BOUND_CHECKS                               |
+|         | Added support for stack allocated / static sized bitstrings        |
+|         | Added examples                                                     |
+| 1.0     | Renamed bstr_err_t variants                                        |
+|         | Added function attributes                                          |
+|         | Added two unit tests for bstr_resize()                             |
+| 0.2     | Added bstr_ffus(), to find first unset bit                         |
+| 0.1     | Initial Release                                                    |

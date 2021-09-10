@@ -68,32 +68,6 @@ SOFTWARE.
   } bstr_bitstr##size##_t;
 
 /**
- * @brief Macro to declare a get_capacity function for a sized bitstring.
- *
- * @param size How many unsigned ints this bitstring contains.
- */
-#define BSTR_STATIC_DECLARE_GET_CAPACITY(size)                                 \
-  const unsigned int bstr##size##_get_capacity = size;
-
-/**
- * @brief Macro to declare a get_bit_capacity function for a sized bitstring.
- *
- * @param size How many unsigned ints this bitstring contains.
- */
-#define BSTR_STATIC_DECLARE_GET_BIT_CAPACITY(size)                             \
-  const unsigned int bstr##size##_get_bit_capacity =                           \
-      size * sizeof(unsigned int) * CHAR_BIT;
-
-/**
- * @brief Macro to declare a to_string_size function for a sized bitstrig.
- *
- * @param size How many unsigned ints this bitstring contains.
- */
-#define BSTR_STATIC_DECLARE_TO_STRING_SIZE(size)                               \
-  const size_t bstr##size##_to_string_size =                                   \
-      ((size * sizeof(unsigned int) * CHAR_BIT) + 1);
-
-/**
  * @brief Macro to declare a to_string function for a sized bitstring.
  *
  * @param size How many unsigned ints this bitstring contains.
@@ -103,7 +77,7 @@ SOFTWARE.
       const bstr_bitstr##size##_t *const bstr, char *const str) {              \
     const char one = '1';                                                      \
     const char zero = '0';                                                     \
-    unsigned int len = bstr##size##_get_bit_capacity;                          \
+    unsigned int len = bstrs_get_bit_capacity(size);                           \
     for (unsigned int i = 0; i != len; i++) {                                  \
       if (bstr##size##_get(bstr, i)) {                                         \
         strncat(str, &one, 1);                                                 \
@@ -175,7 +149,7 @@ SOFTWARE.
     if (on)                                                                    \
       value = UCHAR_MAX;                                                       \
     memset(bstr->_bits, value,                                                 \
-           bstr##size##_get_capacity * sizeof(unsigned int));                  \
+           bstrs_get_capacity(size) * sizeof(unsigned int));                   \
   }
 
 /**
@@ -220,7 +194,7 @@ SOFTWARE.
   __attribute__((nonnull(1))) int bstr##size##_ffs(                            \
       const bstr_bitstr##size##_t *const bstr) {                               \
     unsigned int offset = 0;                                                   \
-    for (unsigned int i = 0; i < bstr##size##_get_capacity; i++) {             \
+    for (unsigned int i = 0; i < bstrs_get_capacity(size); i++) {              \
       int result = ffs(bstr->_bits[i]);                                        \
       if (result > 0)                                                          \
         return (offset * sizeof(unsigned int) * CHAR_BIT) + result - 1;        \
@@ -238,12 +212,12 @@ SOFTWARE.
   __attribute__((nonnull(1))) int bstr##size##_ffus(                           \
       const bstr_bitstr##size##_t *const bstr) {                               \
     int offset = 0;                                                            \
-    for (unsigned int i = 0; i < bstr##size##_get_capacity; i++) {             \
+    for (unsigned int i = 0; i < bstrs_get_capacity(size); i++) {              \
       if (bstr->_bits[i] == UINT_MAX) {                                        \
         offset += sizeof(unsigned int) * CHAR_BIT;                             \
         continue;                                                              \
       }                                                                        \
-      for (int bit = offset; bit != bstr##size##_get_bit_capacity; bit++) {    \
+      for (int bit = offset; bit != bstrs_get_bit_capacity(size); bit++) {     \
         if (!bstr##size##_get(bstr, bit))                                      \
           return bit;                                                          \
       }                                                                        \
@@ -260,7 +234,7 @@ SOFTWARE.
   __attribute__((nonnull(1))) int bstr##size##_ctz(                            \
       const bstr_bitstr##size##_t *const bstr) {                               \
     int result = 0;                                                            \
-    for (unsigned int i = 0; i < bstr##size##_get_capacity; i++) {             \
+    for (unsigned int i = 0; i < bstrs_get_capacity(size); i++) {              \
       if (bstr->_bits[i] == 0) {                                               \
         result += sizeof(unsigned int) * CHAR_BIT;                             \
         continue;                                                              \
@@ -280,7 +254,7 @@ SOFTWARE.
   __attribute__((nonnull(1))) int bstr##size##_clz(                            \
       const bstr_bitstr##size##_t *const bstr) {                               \
     unsigned int *baseptr =                                                    \
-        (unsigned int *)bstr->_bits + bstr##size##_get_capacity - 1;           \
+        (unsigned int *)bstr->_bits + bstrs_get_capacity(size) - 1;            \
     int result = 0;                                                            \
     for (unsigned int *i = baseptr; i >= bstr->_bits; i--) {                   \
       if (*i == 0) {                                                           \
@@ -302,7 +276,7 @@ SOFTWARE.
   __attribute__((nonnull(1))) int bstr##size##_popcnt(                         \
       const bstr_bitstr##size##_t *const bstr) {                               \
     int popcnt = 0;                                                            \
-    for (unsigned int i = 0; i < bstr##size##_get_capacity; i++) {             \
+    for (unsigned int i = 0; i < bstrs_get_capacity(size); i++) {              \
       popcnt += __builtin_popcount(bstr->_bits[i]);                            \
     }                                                                          \
     return popcnt;                                                             \
@@ -318,10 +292,7 @@ SOFTWARE.
  */
 #define BSTR_STATIC_DECLARE_ALL(size)                                          \
   BSTR_STATIC_DECLARE_SIZED_BITSTRING_STRUCT(size);                            \
-  BSTR_STATIC_DECLARE_GET_CAPACITY(size);                                      \
   BSTR_STATIC_DECLARE_BOUND_CHECK(size);                                       \
-  BSTR_STATIC_DECLARE_GET_BIT_CAPACITY(size);                                  \
-  BSTR_STATIC_DECLARE_TO_STRING_SIZE(size);                                    \
   BSTR_STATIC_DECLARE__GET_INT_FOR_BIT_INDEX(size);                            \
   BSTR_STATIC_DECLARE_GET(size);                                               \
   BSTR_STATIC_DECLARE_TO_STRING(size);                                         \
@@ -348,7 +319,7 @@ SOFTWARE.
  *
  * @return unsigned int How many unsigned ints are in this bitstring.
  */
-#define bstrs_get_capacity(size) bstr##size##_get_capacity
+#define bstrs_get_capacity(size) (size)
 
 /**
  * @brief Macro that creates a typesafe function call to get_bit_capacity
@@ -357,7 +328,7 @@ SOFTWARE.
  *
  * @return unsigned int How many bits can be stored in this bitstring.
  */
-#define bstrs_get_bit_capacity(size) bstr##size##_get_bit_capacity
+#define bstrs_get_bit_capacity(size) (size * sizeof(unsigned int) * CHAR_BIT)
 
 /**
  * @brief Macro that creates a typesafe function call to to_stream_size
@@ -367,7 +338,8 @@ SOFTWARE.
  * @return size_t Returns how many bytes are needed to store a human readable
  * string representing this bitstring. It includes the trailing \0.
  */
-#define bstrs_to_string_size(size) bstr##size##_to_string_size
+#define bstrs_to_string_size(size)                                             \
+  ((size * sizeof(unsigned int) * CHAR_BIT) + 1)
 
 /**
  * @brief Macro that creates a typesafe function call to to_string
